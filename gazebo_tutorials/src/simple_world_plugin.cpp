@@ -1,5 +1,6 @@
 #include <gazebo/common/Plugin.hh>
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
+#include <gazebo_ros/node.hpp>
 
 namespace gazebo
 {
@@ -9,21 +10,24 @@ public:
   WorldPluginTutorial() : WorldPlugin()
   {
 
-    // Make sure the ROS node for Gazebo has already been initialized
-    if (!ros::isInitialized())
-    {
-      ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized, unable to load plugin. "
-        << "Load the Gazebo system plugin 'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
-      return;
-    }
-
-    ROS_INFO("Hello World!");
   }
 
   void Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   {
+    gazebo_ros::Node::SharedPtr ros_node = gazebo_ros::Node::Get(_sdf);
+    
+    // Make sure the ROS node for Gazebo has already been initialized
+    if (!rclcpp::ok())
+    {
+      RCLCPP_FATAL(ros_node->get_logger(),
+		   "A ROS node for Gazebo has not been initialized, unable to load plugin. ");
+      return;
+    }
+
+    RCLCPP_INFO(ros_node->get_logger(), "Hello World!");
+    
   }
 
 };
-GZ_REGISTER_WORLD_PLUGIN(WorldPluginTutorial)
+  GZ_REGISTER_WORLD_PLUGIN(WorldPluginTutorial)
 }
