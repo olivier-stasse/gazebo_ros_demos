@@ -24,6 +24,13 @@ find_package(ament_cmake REQUIRED)
 # Depend on system install of Gazebo
 find_package(gazebo REQUIRED)
 find_package(gazebo_ros REQUIRED)
+find_package(gazebo_dev REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 #warning: variable CMAKE_CXX_FLAGS is modified
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
@@ -34,18 +41,34 @@ link_directories(${gazebo_dev_LIBRARY_DIRS})
 link_directories(${GAZEBO_INSTALL_LIB_DIR})
 include_directories(${Boost_INCLUDE_DIR} ${GAZEBO_INCLUDE_DIRS})
 
-
 add_library(${PROJECT_NAME} SHARED src/simple_world_plugin.cpp)
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-  
+
 ament_target_dependencies(
   ${PROJECT_NAME}
   "rclcpp"
   "gazebo_ros"
 )
 ament_export_libraries(${PROJECT_NAME})
+
+add_library(solar_sensor SHARED src/solar_sensor.cpp)
+target_include_directories(solar_sensor PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+
+ament_target_dependencies(solar_sensor
+  "gazebo_ros"
+  "gazebo_dev"
+  "geometry_msgs"
+  "nav_msgs"
+  "rclcpp"
+  "tf2"
+  "tf2_geometry_msgs"
+  "tf2_ros"
+)
+ament_export_libraries(solar_sensor)
 
 link_directories(${GAZEBO_INSTALL_LIB_DIR})
 
@@ -55,10 +78,17 @@ install(TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION lib/${PROJECT_NAME}
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
+
+install(TARGETS solar_sensor
+  EXPORT export_solar_sensor
+  ARCHIVE DESTINATION lib/${PROJECT_NAME}
+  LIBRARY DESTINATION lib/${PROJECT_NAME}
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME})
 
-install(DIRECTORY worlds
+install(DIRECTORY worlds models
   DESTINATION share/${PROJECT_NAME})
   
 ament_package()
