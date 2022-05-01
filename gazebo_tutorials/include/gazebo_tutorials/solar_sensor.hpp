@@ -63,7 +63,7 @@ class SolarSensorPrivate;
     </plugin>
   \endcode
 */
-class SolarSensor : public gazebo::WorldPlugin
+class SolarSensor : public gazebo::ModelPlugin
 {
 public:
   /// Constructor
@@ -73,7 +73,7 @@ public:
   virtual ~SolarSensor();
 
   // Documentation inherited
-  void Load(gazebo::physics::WorldPtr _parent, sdf::ElementPtr _sdf) override;
+  void Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sdf) override;
 
 private:
   /// Private data pointer

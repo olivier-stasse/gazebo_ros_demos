@@ -561,5 +561,12 @@
       <joint_name>wheel_right_joint</joint_name>
     </plugin>    
 
+    <plugin name="turtlebot3_solar_sensor" filename="libsolar_sensor.so">
+      <update_rate>30</update_rate>
+      <light_name>sunloin</light_name>
+      <model_name>turtlebot3_waffle</model_name>
+      <frame_name>base_solar_sensor</frame_name>
+    </plugin>    
+
   </model>
 </sdf>

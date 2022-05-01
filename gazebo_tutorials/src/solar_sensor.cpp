@@ -95,7 +95,8 @@ SolarSensor::~SolarSensor()
 }
   
 // Load the controller
-void SolarSensor::Load(gazebo::physics::WorldPtr world, sdf::ElementPtr sdf)
+void SolarSensor::Load(gazebo::physics::ModelPtr model,
+		       sdf::ElementPtr sdf)
 {
   // Configure the plugin from the SDF file
   impl_->ros_node_ = gazebo_ros::Node::Get(sdf);
@@ -119,6 +120,7 @@ void SolarSensor::Load(gazebo::physics::WorldPtr world, sdf::ElementPtr sdf)
     light_name = sdf->GetElement("light_name")->Get<std::string>();
   }
 
+  gazebo::physics::WorldPtr world = model->GetWorld();
   impl_->light_ = world->LightByName(light_name);
   if (!impl_->light_) {
     RCLCPP_ERROR(
@@ -302,6 +304,6 @@ void SolarSensorPrivate::OnUpdate(const gazebo::common::UpdateInfo & info)
   last_time_ = current_time;
 }
 
-GZ_REGISTER_WORLD_PLUGIN(SolarSensor)
+GZ_REGISTER_MODEL_PLUGIN(SolarSensor)
 
 }  // namespace gazebo_plugins
