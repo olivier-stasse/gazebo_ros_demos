@@ -181,18 +181,9 @@ void SolarSensor::Load(gazebo::physics::ModelPtr model,
     impl_->frame_name_ = sdf->GetElement("frame_name")->Get<std::string>();
   }
 
-  if (!sdf->HasElement("model_name")) {
-    RCLCPP_DEBUG(
-      impl_->ros_node_->get_logger(), "Missing <model_name>, defaults to turtlebot3_waffle");
-  } else {
-    impl_->model_name_ = sdf->GetElement("model_name")->Get<std::string>();
-  }
-
-  gazebo::physics::ModelPtr amodel = world->ModelByName(impl_->model_name_);
-
-  if (amodel!=nullptr)
+  if (model!=nullptr)
   {
-    impl_->reference_link_ = amodel->GetLink(impl_->frame_name_);
+    impl_->reference_link_ = model->GetLink(impl_->frame_name_);
     if (!impl_->reference_link_) {
       RCLCPP_WARN(
         impl_->ros_node_->get_logger(), "<frame_name> [%s] does not exist.",
