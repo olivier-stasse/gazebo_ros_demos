@@ -67,9 +67,6 @@ public:
   /// Frame transform name, should match name of reference link, or be world.
   std::string frame_name_{"base_solar_sensor"};
 
-  /// Turtlebot3 waffle
-  std::string model_name_{"turtlebot3_waffle"};
-
   /// Constant xyz and rpy offsets
   ignition::math::Pose3d offset_;
 
