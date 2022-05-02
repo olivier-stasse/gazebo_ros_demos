@@ -25,11 +25,11 @@ namespace gazebo_plugins
 
 class SolarSensorPrivate;
 
-/// Broadcasts the inertial pose of an model's link via a nav_msgs/Odometry message on a ROS topic.
+/// Broadcasts the pose of a light with respect to a model's link via a sensor_msgs/Imu message on a ROS topic.
 /**
   Example Usage:
   \code{.xml}
-    <plugin name="gazebo_ros_force" filename="libgazebo_ros_force.so">
+    <plugin name="turtlebot3_solar_sensor" filename="libsolar_sensor.so">
 
       <ros>
 
@@ -37,16 +37,16 @@ class SolarSensorPrivate;
         <namespace>/demo</namespace>
 
         <!-- Remap the default topic -->
-        <remapping>odom:=p3d_demo</remapping>
+        <remapping>sunloin_imu:=sunloin_demo</remapping>
 
       </ros>
 
-      <!-- Name of the link within this model whose pose will be published -->
-      <body_name>box_link</body_name>
+      <!-- Name of the light within this world whose pose wrt frame_name will be published -->
+      <light_name>sunloin</body_name>
 
-      <!-- Name of another link within this model to use as a reference frame.
-           Remove the tag to use the world as a reference. -->
-      <frame_name>sphere_link</frame_name>
+      <!-- Name of the link within this model to use as a reference frame.
+           Remove the tag to use base_solar_sensor as a reference. -->
+      <frame_name>base_solar_sensor</frame_name>
 
       <!-- Update rate in Hz, defaults to 0.0, which means as fast as possible -->
       <update_rate>1</update_rate>
